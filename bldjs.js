@@ -1,3 +1,5 @@
+console.log('Hi Alan');
+
 $("[draggable-item]").draggable({ scroll: true, scrollSpeed: 100, scrollSensitivity: 100, handle: "[draggable-handle]" });
 /* START BUTTON */
 $('#start-button').on('click', function() {
