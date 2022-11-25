@@ -1,8 +1,8 @@
 $("[draggable-item]").draggable({ scroll: true, scrollSpeed: 100, scrollSensitivity: 100, handle: "[draggable-handle]" });
 
-let zIndex = 500;
+var zIndex = 500;
 $('document').on('mousedown', function() {
-	zIndex += 2;
+  zIndex += 2;
 });
 
 $('.window').on('mousedown', function() {
