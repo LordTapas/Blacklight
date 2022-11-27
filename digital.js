@@ -3,6 +3,7 @@ $("[draggable-item]").draggable({ scroll: true, scrollSpeed: 100, scrollSensitiv
 var zIndex = 500;
 $('.window').on('mousedown', function() {
   zIndex += 2;
+  $(this).css('zIndex', zIndex);
 });
 
 $('.window').on('mousedown', function() {
