@@ -214,16 +214,3 @@ setInterval(function () {
   let timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: "2-digit" });
 	clock.innerText = timestamp;
   }, 1000);
-
-
-// VIDEO CAROUSEL  
-var Webflow = Webflow || [];
-Webflow.push(function() {
-    var figure = $(".video").hover(function() {  
-        $('video', this).get(0).play(); 
-    }, function() {
-        $('video', this).get(0).pause();
-    }).each(function() {
-        $('video', this).get(0).pause();
-    });
-});
