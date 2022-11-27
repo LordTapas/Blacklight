@@ -1,12 +1,9 @@
 $("[draggable-item]").draggable({ scroll: true, scrollSpeed: 100, scrollSensitivity: 100, handle: "[draggable-handle]" });
 
+// Dynamic Z-Index & Window Mouse Click
 var zIndex = 500;
 $('.window').on('mousedown', function() {
   zIndex += 2;
-  $(this).css('zIndex', zIndex);
-});
-
-$('.window').on('mousedown', function() {
   $(this).css("z-index", zIndex);
   $(this).find('.window--title-bar').addClass('active--window');
   $(this).siblings('.window').find('.window--title-bar').removeClass('active--window');
