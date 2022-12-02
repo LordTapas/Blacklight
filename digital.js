@@ -4,12 +4,76 @@ var zIndex = 500;
 $('.window').on('mousedown', function() {
   zIndex += 2;
   $(this).css('zIndex', zIndex);
-});
-
-$('.window').on('mousedown', function() {
-  $(this).css("z-index", zIndex);
   $(this).find('.window--title-bar').addClass('active--window');
   $(this).siblings('.window').find('.window--title-bar').removeClass('active--window');
+  let app = $(this).attr('id');
+  var activeTask = document.getElementsByClassName('selected');
+  activeTask[0].classList.toggle('selected');
+  switch (app) {
+    case 'msn--window':
+      $('#msn--taskbar').toggleClass('selected');
+      break;
+    case 'ie--window':
+      $('#ie--taskbar').toggleClass('selected');
+      break;
+    case 'bld--window':
+      $('#bld--taskbar').toggleClass('selected');
+      break;
+    case 'notepad--window':
+      $('#notepad--taskbar').toggleClass('selected');
+      break;
+    case 'winamp--window':
+      $('#winamp--taskbar').toggleClass('selected');
+      break;
+    case 'contact--window':
+      $('#contact--taskbar').toggleClass('selected');
+      break;
+    case 'portfolio--window':
+      $('#portfolio--taskbar').toggleClass('selected');
+      break;
+    case 'pinball--window':
+      $('#pinball--taskbar').toggleClass('selected');
+      break;
+    default:
+      console.log('default case.');
+      break;
+    }
+});
+
+$('.startbar--window-wrap').on('click', function() {
+  $(this).toggleClass('selected');
+  let app = $(this).attr('id');
+  switch (app) {
+    case 'pinball--taskbar':
+      $('#pinball--window').toggleClass('is--minimized');
+      break;
+    case 'msn--taskbar':
+      $('#msn--window').toggleClass('is--minimized');
+      break;
+    case 'notepad--taskbar':
+      $('#notepad--window').toggleClass('is--minimized');
+      break;
+    case 'winamp--taskbar':
+      $('#winamp--window').toggleClass('is--minimized');
+      break;
+    case 'bld--taskbar':
+      $('#bld--window').toggleClass('is--minimized');
+      break;
+    case 'ie--taskbar':
+      $('#ie--window').toggleClass('is--minimized');
+      break;
+    case 'portfolio--taskbar':
+      $('#portfolio--window').toggleClass('is--minimized');
+      break;
+    case 'contact--taskbar':
+      $('#contact--window').toggleClass('is--minimized');
+      break;
+    case 'clients--taskbar':
+      $('#clients--window').toggleClass('is--minimized');
+      break;
+    default:
+      console.log('switch default.');
+  }
 });
 
 // START BUTTON
@@ -34,17 +98,13 @@ $('#msn--close').on('click', function() {
   $('#msn--window').toggleClass('is--minimized');
   $('#msn--taskbar').toggleClass('selected');
 });
-$('#msn--taskbar').on('click', function() {
-  $('#msn--window').toggleClass('is--minimized');
-  $('#msn--taskbar').toggleClass('selected');
-});
 $('#msn--title-bar').dblclick(function() {
   $('#msn--window').toggleClass('is--maximized');
 });
 // INTERNET EXPLORER
 $('#ie--start').on('click', function() {
-    $('#ie--window').css("z-index", zIndex);
-    $('#ie--window').addClass('is--active');
+  $('#ie--window').css("z-index", zIndex);
+  $('#ie--window').addClass('is--active');
   $('#ie--taskbar').addClass('is--active');
   $('#ie--taskbar').addClass('selected');
   $('#ie--window').find('.window--title-bar').addClass('active--window');
@@ -56,10 +116,6 @@ $('#ie--close').on('click', function() {
   $('#ie--taskbar').removeClass('is--active');
  });
   $('#ie--minimize').on('click', function() {
-  $('#ie--window').toggleClass('is--minimized');
-  $('#ie--taskbar').toggleClass('selected');
-});
-$('#ie--taskbar').on('click', function() {
   $('#ie--window').toggleClass('is--minimized');
   $('#ie--taskbar').toggleClass('selected');
 });
@@ -84,10 +140,6 @@ $('#winamp--minimize').on('click', function() {
   $('#winamp--window').toggleClass('is--minimized');
   $('#winamp--taskbar').toggleClass('selected');
 });
-$('#winamp--taskbar').on('click', function() {
-  $('#winamp--window').toggleClass('is--minimized');
-  $('#winamp--taskbar').toggleClass('selected');
-});
 // NOTEPAD
 $('#notepad--start').on('click', function() {
     $('#notepad--window').css("z-index", zIndex);
@@ -107,18 +159,13 @@ $('#notepad--minimize').on('click', function() {
   $('#notepad--window').toggleClass('is--minimized');
   $('#notepad--taskbar').toggleClass('selected');
 });
-$('#notepad--taskbar').on('click', function() {
-  $('#notepad--window').toggleClass('is--minimized');
-  $('#notepad--taskbar').toggleClass('selected');
-});
 $('#notepad--title-bar').dblclick(function() {
   $('#notepad--window').toggleClass('is--maximized');
 });
  // BLACKLIGHT DIGITAL
 $('#bld--start').dblclick(function() {
-    $('#bld--window').css("z-index", zIndex);
-    $('#bld--window').toggleClass('is--active');
-
+  $('#bld--window').css("z-index", zIndex);
+  $('#bld--window').toggleClass('is--active');
   $('#bld--taskbar').toggleClass('is--active');
   $('#bld--window').find('.window--title-bar').addClass('active--window');
   $('#bld--window').siblings('.window').find('.window--title-bar').removeClass('active--window');
@@ -129,10 +176,6 @@ $('#bld--close').on('click', function() {
   $('#bld--taskbar').removeClass('is--active');
 });
 $('#bld--minimize').on('click', function() {
-  $('#bld--window').toggleClass('is--minimized');
-  $('#bld--taskbar').toggleClass('selected');
-});
-$('#bld--taskbar').on('click', function() {
   $('#bld--window').toggleClass('is--minimized');
   $('#bld--taskbar').toggleClass('selected');
 });
@@ -173,10 +216,6 @@ $('#pinball--close').on('click', function() {
   $('#pinball--taskbar').removeClass('is--active');
 });
 $('#pinball--minimize').on('click', function() {
-  $('#pinball--window').toggleClass('is--minimized');
-  $('#pinball--taskbar').toggleClass('selected');
-});
-$('#pinball--taskbar').on('click', function() {
   $('#pinball--window').toggleClass('is--minimized');
   $('#pinball--taskbar').toggleClass('selected');
 });
