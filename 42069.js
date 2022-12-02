@@ -90,6 +90,7 @@ $('.startbar--icon-wrap').on('click', function() {
     default:
         console.log('No app detected.');
         break;
+	}
 });
 
 // LAUNCH APP FROM DESKTOP
