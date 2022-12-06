@@ -2,32 +2,31 @@ $("[draggable-item]").draggable({ scroll: true, scrollSpeed: 100, scrollSensitiv
 
 var zIndex = 500;
 
-// REMOVE SELECTED TASK FROM TASKBAR
-function removeActiveTaskbar() {
-    let taskbar = document.getElementsByClassName('startbar--window-wrap.is--active.selected');
-    if (taskbar.length > 0) {
-        taskbar.forEach(e => {
-            e.removeClass('selected');
-        })            
-}
-};
-
 // MAKE ACTIVE WINDOW BY Z-INDEX AND IS--ACTIVE SWITCH
 function makeActiveWindow(e) {
-    $(e).css('zIndex', zIndex);
-    $(e).find('.window--title-bar').addClass('active--window');
-    $(e).siblings('.window').find('.window--title-bar').removeClass('active--window');
-}
+    if ($(e).hasClass('is--minimized')){
+        zIndex += 2;
+        $(e).removeClass('is--minimized');
+        $(e).find('.window--title-bar').addClass('active--window');
+        $(e).siblings('.window').find('.window--title-bar').removeClass('active--window');
+        $(e).css('zIndex', zIndex);
+    } else {
+        zIndex += 2;
+        $(e).find('.window--title-bar').addClass('active--window');
+        $(e).siblings('.window').find('.window--title-bar').removeClass('active--window');
+        $(e).css('zIndex', zIndex);
+    }};
 
 function startApp(string) {
+    zIndex += 2;
     let window = "#" + string + "--window";
     let taskbar = "#" + string + "--taskbar";
     $(window).css("z-index", zIndex);
     $(window).toggleClass('is--active');
     $(taskbar).toggleClass('is--active');
-    removeActiveTaskbar();
+    $(taskbar).siblings('.startbar--window-wrap').removeClass('selected');
     $(taskbar).addClass('selected');
-    $(taskbar).find('.window--title-bar').addClass('active--window');
+    $(window).find('.window--title-bar').addClass('active--window');
     $(window).siblings('.window').find('.window--title-bar').removeClass('active--window');
 };
 
@@ -39,7 +38,7 @@ $('.window').on('mousedown', function() {
     $(this).siblings('.window').find('.window--title-bar').removeClass('active--window');
     let app = $(this).attr('id');
     var activeTask = document.getElementsByClassName('selected');
-    activeTask[0].classList.toggle('selected');
+    $(activeTask[0]).toggleClass('selected');
     switch (app) {
       case 'msn--window':
         $('#msn--taskbar').toggleClass('selected');
@@ -71,7 +70,7 @@ $('.window').on('mousedown', function() {
       }
   });
 
-// LAUNCH APP FROM STARTBAR
+// OPEN / LAUNCH APP FROM STARTBAR
 $('.startbar--icon-wrap').on('click', function() {
 	let app = $(this).attr('id');
   	switch (app) {
@@ -84,15 +83,16 @@ $('.startbar--icon-wrap').on('click', function() {
     case 'winamp--start':
         startApp('winamp');
         break;
-    case 'notepad--window':
+    case 'notepad--start':
         startApp('notepad');
         break;
     default:
         console.log('No app detected.');
         break;
+}
 });
 
-// LAUNCH APP FROM DESKTOP
+// OPEN / LAUNCH APP FROM DESKTOP
 $('.icon--wrap').dblclick(function() {
     let app = $(this).attr('id');
     switch (app) {
@@ -125,106 +125,96 @@ $('.icon--wrap').dblclick(function() {
 
 // CLICK ON TASKBAR
 $('.startbar--window-wrap').on('click', function() {
-    $(this).toggleClass('selected');
-    let app = $(this).attr('id');
-    switch (app) {
-        case 'pinball--taskbar':
-            let q = document.getElementById('#pinball--window');
-            if (q.matches('.is--minimized')) {
-                q.toggleClass('is--minimized');
-              } else {
-                zIndex += 2;
-                pinball = $('#pinball--window');
-                makeActiveWindow(pinball);
-              }
-            break;
-        case 'msn--taskbar':
-            let r = document.getElementById('#msn--window');
-            if (r.matches('.is--minimized')) {
-                r.toggleClass('is--minimized');
-              } else {
-                zIndex += 2;
-                msn = $('#msn--window');
-                makeActiveWindow(msn);
-              }
-            break;
-        case 'notepad--taskbar':
-            let s = document.getElementById('#notepad--window');
-            if (s.matches('.is--minimized')) {
-                s.toggleClass('is--minimized');
-              } else {
-                zIndex += 2;
-                notepad = $('#notepad--window');
-                makeActiveWindow(notepad);
-              }
-            break;
-        case 'winamp--taskbar':
-            let t = document.getElementById('#winamp--window');
-            if (t.matches('.is--minimized')) {
-                t.toggleClass('is--minimized');
-              } else { 
-                zIndex += 2;
-                winamp = $('#winamp--window');
-                makeActiveWindow(winamp);
-              }
-            break;
-        case 'bld--taskbar':
-            let u = document.getElementById('#bld--window');
-            if (u.matches('.is--minimized')) {
-                u.toggleClass('is--minimized');
-              } else {
-                zIndex += 2;
-                bld = $('#bld--window');
-                makeActiveWindow(bld);
-              }
-            break;
-        case 'ie--taskbar':
-            let v = document.getElementById('#ie--window');
-            if (v.matches('.is--minimized')) {
-                v.toggleClass('is--minimized');
-              } else {
-                zIndex += 2;
-                ie = $('#ie--window');
-                makeActiveWindow(ie);
-              }
-            break;
-        case 'portfolio--taskbar':
-            let w = document.getElementById('#portfolio--window');
-            if (w.matches('.is--minimized')) {
-                w.toggleClass('is--minimized');
-              } else {
-                zIndex += 2;
-                portfolio = $('#portfolio--window');
-                makeActiveWindow(portfolio);
-              }
-              break;
-        case 'contact--taskbar':
-            let x = document.getElementById('#contact--window');
-            if (x.matches('.is--minimized')) {
-                x.toggleClass('is--minimized');
-              } else {
-                zIndex += 2;
-                contact = $('#contact--window');
-                makeActiveWindow(contact);
-              }
-            break;
-        case 'clients--taskbar':
-            let p = document.getElementById('#clients--window');
-            if (p.matches('.is--minimized')) {
-                p.toggleClass('is--minimized');
-              } else {
-                zIndex += 2;
-                clients = $('#clients--window');
-                makeActiveWindow(clients);
-              }
-            break;
-        default:
-            console.log('No app detected.');
-            break;
+    if ($(this).hasClass('selected')){
+        $(this).toggleClass('selected');
+        let app = $(this).attr('id');
+        switch (app) {
+            case 'pinball--taskbar':
+                $("#pinball--window").toggleClass('is--minimized');
+                break;
+            case 'msn--taskbar':
+                $("#msn--window").toggleClass('is--minimized');
+                break;
+            case 'notepad--taskbar':
+                $("#notepad--window").toggleClass('is--minimized');
+                break;
+            case 'winamp--taskbar':
+                $("#winamp--window").toggleClass('is--minimized');
+                break;
+            case 'bld--taskbar':
+                $("#bld--window").toggleClass('is--minimized');
+                break;
+            case 'ie--taskbar':
+                $("#ie--window").toggleClass('is--minimized');
+                break;
+            case 'portfolio--taskbar':
+                $("#portfolio--window").toggleClass('is--minimized');
+                  break;
+            case 'contact--taskbar':
+                $("#contact--window").toggleClass('is--minimized');
+                break;
+            case 'clients--taskbar':
+                $("#clients--window").toggleClass('is--minimized');
+                break;
+            default:
+                console.log('No app detected.');
+                break;
         }
-});
+    } else {
+            $(this).siblings('.startbar--window-wrap').removeClass('selected');
+            $(this).toggleClass('selected');
+            let app = $(this).attr('id');
+            switch (app) {
+                case 'pinball--taskbar':
+                    pinball = $('#pinball--window');
+                    makeActiveWindow(pinball);
+                    break;
+                case'msn--taskbar':
+                    msn = $('#msn--window');
+                    makeActiveWindow(msn);
+                    break;
+                case 'bld--taskbar':
+                    bld = $('#bld--window');
+                    makeActiveWindow(bld);
+                    break;
+                case 'ie--taskbar':
+                    ie = $('#ie--window');
+                    makeActiveWindow(ie);
+                    break;
+                case 'winamp--taskbar':
+                    winamp = $('#winamp--window');
+                    makeActiveWindow(winamp);
+                    break;
+                case 'notepad--taskbar':
+                    notepad = $('#notepad--window');
+                    makeActiveWindow(notepad);
+                    break;
+                case 'portfolio--taskbar':
+                    portfolio = $('#portfolio--window');
+                    makeActiveWindow(portfolio);
+                    break;
+                case 'contact--taskbar':
+                    contact = $('#contact--window');
+                    makeActiveWindow(contact);
+                    break;
+                case 'clients--taskbar':
+                    clients = $('#clients--window');
+                    makeActiveWindow(clients);
+                    break;
+                default:
+                    console.log('No app detected.');
+                    break;
+                }
+            }
+        });
 
 // CLOSE APPS
+$('.winamp--close').on('click', function() {
+    $('#winamp--window').removeClass('is--active');
+    $('#winamp--taskbar').toggleClass('selected');
+    $('#winamp--taskbar').removeClass('is--active');
+});
+
 $('.icon--close').on('click', function() {
     let app = $(this).attr('id');
     switch (app) {
@@ -283,10 +273,6 @@ $('.icon--minimize').on('click', function() {
             $('#bld--window').addClass('is--minimized');
             $('#bld--taskbar').toggleClass('selected');
             break;
-        case 'winamp--minimize':
-            $('#winamp--window').addClass('is--minimized');
-            $('#winamp--taskbar').toggleClass('selected');
-            break;
         case 'notepad--minimize':
             $('#notepad--window').addClass('is--minimized');
             $('#notepad--taskbar').toggleClass('selected');
@@ -317,67 +303,96 @@ $('.icon--minimize').on('click', function() {
     }
 });
 
+// WINAMP MINIMIZE
+$('.winamp--minimize').on('click', function() {
+    $('#winamp--window').addClass('is--minimized');
+    $('#winamp--taskbar').toggleClass('selected');
+});
+
 // MAXIMIZE APP
+function toggleMaximize(appWindow) {
+  if ($(appWindow).hasClass('is--maximized')) {
+    $(appWindow).removeClass('is--maximized');
+  } else {
+    $(appWindow).css({top: "0px", left: "0px"});
+    $(appWindow).addClass('is--maximized');
+  } 
+};
+
+function maximizeApp(el) {
+  let app = $(el).attr('id');
+  console.log(app);
+  switch (app) {
+    case 'bld--maximize':
+        appWindow = '#bld--window';
+        toggleMaximize(appWindow);
+        break;
+    case 'notepad--maximize':
+        appWindow = '#notepad--window';
+        toggleMaximize(appWindow);
+        break;
+    case 'contact--maximize':
+        appWindow = '#contact--window';
+        toggleMaximize(appWindow);
+        break;
+    case 'portfolio--maximize':
+        appWindow = '#portfolio--window';
+        toggleMaximize(appWindow);
+        break;
+    case 'ie--maximize':
+        appWindow = '#ie--window';
+        toggleMaximize(appWindow);
+        break;
+    case 'msn--maximize':
+        appWindow = '#msn--window';
+        toggleMaximize(appWindow);
+        break;
+    case 'clients--maximize':
+        appWindow = '#clients--window';
+        toggleMaximize(appWindow);
+        break;
+    case 'bld--title-bar':
+        appWindow = '#bld--window';
+        toggleMaximize(appWindow);
+        break;
+    case 'notepad--title-bar':
+        appWindow = '#notepad--window';
+        toggleMaximize(appWindow);
+        break;
+    case 'contact--title-bar':
+        appWindow = '#contact--window';
+        toggleMaximize(appWindow);
+        break;
+    case 'portfolio--title-bar':
+        appWindow = '#portfolio--window';
+        toggleMaximize(appWindow);
+        break;
+    case 'clients--title-bar':
+        appWindow = '#clients--window';
+        toggleMaximize(appWindow);
+        break;
+    case 'ie--title-bar':
+        appWindow = '#ie--window';
+        toggleMaximize(appWindow);
+        break;
+    case 'msn--title-bar':
+        appWindow = '#msn--window';
+        toggleMaximize(appWindow);
+        break;
+    default:
+        console.log('No app detected.');    
+        break;
+  }
+};
+
 $('.icon--maximize').on('click', function() {
-    let app = $(this).attr('id');
-    switch (app) {
-        case 'bld--maximize':
-            $('#bld--window').addClass('is--maximized');
-            break;
-        case 'notepad--maximize':
-            $('#notepad--window').addClass('is--maximized');
-            break;
-        case 'contact--maximize':
-            $('#contact--window').addClass('is--maximized');
-            break;
-        case 'portfolio--maximize':
-            $('#portfolio--window').addClass('is--maximized');
-            break;
-        case 'ie--maximize':
-            $('#ie--window').addClass('is--maximized');
-            break;
-        case 'msn--maximize':
-            $('#msn--window').addClass('is--maximized');
-            break;
-        case 'clients--maximize':
-            $('#clients--window').addClass('is--maximized');
-            break;
-        default:
-            console.log('No app detected.');    
-            break;
-    }
+  maximizeApp(this);
 });
 
 // DOUBLE CLICK TITLE BAR
 $('.window--title-bar').dblclick(function() {
-    let app = $(this).attr('id');
-        switch (app) {
-            case 'bld--title-bar':
-                $('#bld--window').toggleClass('is--maximized');
-                break;
-            case 'notepad--title-bar':
-                $('#notepad--window').toggleClass('is--maximized');
-                break;
-            case 'contact--title-bar':
-                $('#contact--window').toggleClass('is--maximized');
-                break;
-            case 'portfolio--title-bar':
-                $('#portfolio--window').toggleClass('is--maximized');
-                break;
-            case 'clients--title-bar':
-                $('#clients--window').toggleClass('is--maximized');
-                break;
-            case 'ie--title-bar':
-                $('#ie--window').toggleClass('is--maximized');
-                break;
-            case'msn--title-bar':
-                $('#msn--window').toggleClass('is--maximized');
-                break;
-            default:
-                console.log('No app detected.');    
-                break;
-        }
-    });
+    maximizeApp(this);
+});
 
 // START BUTTON
 $('#start-button').on('click', function() {
